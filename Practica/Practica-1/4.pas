@@ -87,13 +87,57 @@ procedure productosrubro3(L: lista; var v3: vectorprod; var diml: integer);
 begin
 	diml:=0;
 	while(l <> nil) and (diml < maxprod) do
-	begin
-		diml:=diml + 1;
-		v3[diml]:=l^.dato;
+	begin	
+			diml:=diml + 1;
+			v3[diml]:=l^.dato;	
 		l:=l^.sig;
 	end;
 end;
 
+procedure insercion(var v: vectorprod; diml: integer);
+var
+	i, j: integer;
+	p: producto;
+begin
+	for i:=2 to diml do 
+	begin
+		p:= v[i];
+		j:= i -1;
+		while (j > 0) and (v[j].precio > p.precio) do 
+		begin
+			v[j+1]:=v[j];
+			j:=j - 1;
+		end;
+	v[j+1]:=p;
+	end;
+end;
+
+procedure mostrarvector2(ve: vectorprod; diml: integer);
+var
+	i: integer;
+begin
+	for i:=1 to diml do 
+	begin
+		write('codigo: ' , ve[i].codigo);
+		write('precio: ' , ve[i].precio);
+	end;
+end;
+
+procedure promediar(v: vectorprod; diml: integer);
+var
+	i: integer;
+	suma, promedio: real;
+begin
+	suma:=0;
+	for i:=1 to diml do
+	
+		suma:=suma + v[i].precio;
+	if(diml > 0) then
+	begin
+		promedio:=suma / diml;
+	end;
+end;
+	
 var
 v: vectorrubros;
 v3: vectorprod;
@@ -102,5 +146,8 @@ begin
 	iniciar(v);
 	cargarvector(v);
 	mostrarvector(v);
-	productosrubro3(l, v3, diml);
+	productosrubro3(v[3], v3, diml);
+	insercion(v3, diml);
+	mostrarvector2(v3, diml);
+	promediar(v3, diml);
 end.
