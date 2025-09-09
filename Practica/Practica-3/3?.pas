@@ -26,11 +26,15 @@ end;
 
 procedure leer(var legajo: integer; var f: final);
 begin
+	write('legajo: ' );
 	read(legajo);
 	if(legajo <> 0) then
 	begin
+		write('codigo: ' );
 		read(f.codigo);
+		write('fecha: ' );
 		read(f.fecha);
+		write('nota: ' );
 		read(f.nota);
 	end;
 end;
@@ -93,31 +97,54 @@ begin
 	contar:=c;
 end;
 
-procedure procesar(a: arbol);
-var
-	cant: integer;
-	aprob: integer;
+function contarimpar(a: arbol): integer;
 begin
-	cant:=0;
-	aprob:=0;
-	if (a <> nil) then
-	procesar(a^.hi);
+	if (a = nil) then
+	contarimpar:=0
+	else
 	begin
-		if (a^.dato.legajo mod 2 = 1) then
-		cant:=cant + 1;
-		
-		aprob:=contar(a^.dato.finales);
-		write(a^.dato.legajo, aprob);
-		
-		procesar(a^.hd);
+		if(a^.dato.legajo mod 2 = 1) then
+		contarimpar:=1 + contarimpar(a^.hi) + contarimpar(a^.hd)
+		else
+		contarimpar:=contarimpar(a^.hi) + contarimpar(a^.hd);
 	end;
-	write(cant);
 end;
  
+function comprobar(l: lista): integer;
+var
+	c: integer;
+begin
+	c:=0;
+	while(l <> nil) do
+	begin
+		if(l^.dato.nota >= 4) then
+		c:=c + 1;
+		l:=l^.sig;
+	end;
+	comprobar:=c;
+end;
+ 
+procedure finalaprobados(a: arbol);
+var
+	aprobados: integer;
+begin
+	if(a <> nil) then
+	begin
+		finalaprobados(a^.hi);
+		
+		aprobados:=comprobar(a^.dato.finales);
+		writeln('legajo: ' , a^.dato.legajo , ' finales aprobados ' , aprobados);
+		finalaprobados(a^.hd);
+	end;
+end;
+		
 var
 a: arbol;
+cant: integer;
 begin
 	a:=nil;
 	cargar(a);
-	procesar(a);
+	cant:=contarimpar(a);
+	writeln('la cantida de legajos impares son: ' , cant);
+	finalaprobados(a);
 end.
