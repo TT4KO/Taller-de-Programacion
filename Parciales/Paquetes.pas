@@ -1,3 +1,11 @@
+{Correo argentino desea analiza la informacion de los paquetes enviados durante 2024. De casa paquete enviuado se conoce: codigo de envio, DNI del emisor,
+DNI del receptor, cantidad de objetos en el paquete y peso del paquete en gramos. Realice un programa que contenga e invoque a:
+	a) Un modulo que lea la informacion de paquetes enviados y retorne una estructura con todos los paquetes leidos. La estructura debe ser eficiente
+ 	   para buscar por peso del paquete en gramos. La lectura finaliza al leer un paquete con codigo de envio 0.
+	b)Un modulo que reciba la estrucuta generada en a) y vos valores y retorne una lista con todos los paquetes enviados cuyo peso esta entre los dos 
+ 	  valores recibidos.
+	c)un modulo que reciba la estructura generada en a) y retorne toda la informacion del paquete enviado con mayor cantida de objetos.}
+
 program iasdj;
 type
 paquete = record
