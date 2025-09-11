@@ -1,4 +1,3 @@
-program idas;
 type
 rango = 2015..2024;
 auto = record
@@ -14,6 +13,12 @@ arbol = ^nodo;
 	dato: auto;
 	hd: arbol;
 	hi: arbol;
+end;
+
+listaanio = ^nodo4;
+	nodo4 =  record
+	dato: auto;
+	sig: listaanio;
 end;
 
 infomarca = record
@@ -38,6 +43,8 @@ arbol2 = ^nodo2;
 	hd: arbol2;
 	hi: arbol2;
 end;
+
+vector = array [rango] of listaanio;
 
 procedure leer(var a: auto);
 begin
@@ -127,7 +134,8 @@ begin
 	mismamarca:=0;
 	begin
 		if(a^.dato.marca = marca) then
-		mismamarca:=1 + mismamarca(a^.hi, marca) + mismamarca(a^.hd, marca);
+		mismamarca:=1 + mismamarca(a^.hi, marca) + mismamarca(a^.hd, marca)
+		else
 		mismamarca:=mismamarca(a^.hi, marca) + mismamarca(a^.hd, marca);
 	end;
 end;
@@ -142,16 +150,63 @@ end;
 
 function mismamarca2(a: arbol2; m: string): integer;
 begin
-	if(a <> nil) then
+	if(a = nil) then
 	mismamarca2:=0
 	else
 		if(a^.dato.marca = m) then
 		mismamarca2:=contarlista(a^.dato.info)
 	else
 	if(m < a^.dato.marca) then
-	mismamarca2(a^.hd, m)
+	mismamarca2(a^.hi, m)
 	else
-	mismamarca2(a^.hi, m);
+	mismamarca2(a^.hd, m);
+end;
+
+procedure iniciarvector(var v: vector);
+var
+	i: integer;
+begin
+	for i:=2015 to 2024 do
+	v[i]:=nil;
+end; 
+
+procedure agregarAdelante(var L: listaanio; a: auto);
+var
+  nue: listaanio;
+begin
+  new(nue);
+  nue^.dato:= a;
+  nue^.sig:= L;
+  L:= nue;
+end;
+
+	
+procedure agrupar(a: arbol; var v: vector);
+begin
+	if(a <> nil) then
+	begin
+		agrupar(a^.hi, v);
+		agregaradelante(v[a^.dato.anio], a^.dato);
+		agrupar(a^.hd, v);
+	end;
+end;
+
+function buscarpatente(a: arbol; p: integer): string;
+begin
+  if a = nil then
+    buscarpatente := ' '
+  else
+  begin
+    if a^.dato.patente = p then
+      buscarpatente := a^.dato.modelo
+    else
+    begin
+      if p < a^.dato.patente then
+        buscarpatente := buscarpatente(a^.hi, p)
+      else
+        buscarpatente := buscarpatente(a^.hd, p);
+    end;
+  end;
 end;
 
 var
@@ -161,15 +216,26 @@ var
 	marcaleida: string;
 	totalmarca2: integer;
 	marcaleida2: string;
+	v: vector;
+	leerpatente: integer;
 begin
+	iniciarvector(v);{d}
 	a:=nil;
 	a2:=nil;
 	cargar(a, a2);{a}
+	write('ingrese una marca');
 	read(marcaleida);{b}
 	totalmarca:=mismamarca(a, marcaleida);{b}
 	write('total de autos con la misma marca: ' , totalmarca);{b}
+	
 	read(marcaleida2);{c}
 	totalmarca2:=mismamarca2(a2, marcaleida2);{c}
 	write(totalmarca2);{c}
+	
+	agrupar(a, v);{d}
+	
+	writeln('ingrese una patente');{e}
+	read(leerpatente);{e}
+	buscarpatente(a, leerpatente);{e}
 end.
 	
