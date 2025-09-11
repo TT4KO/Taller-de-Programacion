@@ -103,10 +103,15 @@ procedure buscar(a: arbol; min, max: integer; var l: lista);
 begin
 	if(a <> nil) then
 	begin
-		buscar(a^.hi, min, max, l);
-		if(a^.dato.peso >=min) and (a^.dato.peso <= max) then
+		if(a^.dato.peso >=min) then
+        if (a^.dato.peso <= max) then
 		insertarlista(l, a^.dato);
-		buscar(a^.hd, min, max, l);
+ 		buscar(a^.hi, min, max, l);
+		buscar(a^.hd, min, max, l)
+  	else
+   	buscar(a^.hi, min, max, l)
+	else
+	buscar(a^.hd, min, max, l)
 	end;
 end;
 
