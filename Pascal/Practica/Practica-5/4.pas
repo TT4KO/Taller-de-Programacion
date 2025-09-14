@@ -1,21 +1,10 @@
-type 
-subGenero = 1..7;
- libro = record
-	 isbn : integer;
-	 codAutor : integer;
-	 genero : subGenero;
- end;
-
-auto = record
-	codigo: integer;
-	cantidad: integer;
-end;
-
-arbol = ^nodo;
-	nodo = record
-	dato: auto;
-	hd: arbol;
-	hi: arbol;
+program iasd;
+type
+rango = 1..7;
+libro = record
+	isbn: integer;
+	codigoautor: integer;
+	genero: rango;
 end;
 
 infogenero = record
@@ -23,93 +12,147 @@ infogenero = record
 	cantidadlibro: integer;
 end;
 
-vector =  array [subgenero] of infogenero ;
+vector = array [rango] of infogenero;
 
-procedure iniciarvector(var v: vector);
+autor = record
+	codigo: integer;
+	cantidad: integer;
+end;
+
+arbol =  ^nodo;
+	nodo = record
+	dato: autor;
+	hd, hi: arbol;
+end;
+
+procedure iniciar(var v: vector);
 var
-	i: subgenero;
+	i: rango;
 begin
 	for i:=1 to 7 do
-	v[i].codigogenero:=i;
-	v[i].cantidadlibro:=0;
+	begin
+		v[i].codigogenero:=i;
+		v[i].cantidadlibro:=0;
+	end;
 end;
-	
-procedure leerLibro(var l: libro);
+
+procedure leer (var l : libro);
 begin
-  writeln('Ingrese ISBN (0 para cortar): ');
-  readln(l.isbn);
-  if (l.isbn <> 0) then
-  begin
-    writeln('Ingrese codigo de autor: ');
-    readln(l.codAutor);
-    writeln('Ingrese genero (1..7): ');
-    readln(l.genero);
-  end;
-end;	
-	
-procedure insertararbol(var a:arbol; codautor: integer);
+ l.isbn := Random(1000);
+ if (l.isbn <> 0) then begin
+ l.codigoAutor := Random(300) + 100;
+ l.genero := Random(7) + 1;
+ end;
+end;
+
+procedure agregar(var a: arbol; l: libro);
 begin
 	if(a = nil) then
 	begin
 		new(a);
-		a^.dato.codigo:=codautor;
-		a^.dato.cantidad:=1;
-		a^.hd:=nil;
+		a^.dato.codigo:=l.codigoautor;
+		a^.dato.cantidad:= 1;
 		a^.hi:=nil;
+		a^.hd:=nil;
 	end
 	else
-	if (codautor = a^.dato.codigo) then
+	if(a^.dato.codigo = l.codigoautor) then
 	a^.dato.cantidad:=a^.dato.cantidad + 1
 	else
-	if(codautor < a^.dato.codigo) then
-	insertararbol(a^.hi, codautor)
+	if (l.codigoautor <a^.dato.codigo) then
+	agregar(a^.hi, l)
 	else
-	insertararbol(a^.hd, codautor);
+	agregar(a^.hd, l);
 end;
-	
-procedure cargar(var a:arbol; var v: vector);
+
+procedure cargar(var a: arbol; var v: vector);
 var
 	l: libro;
 begin
-	leerlibro(l);
+	leer(l);
 	while(l.isbn <> 0) do
 	begin
-		insertararbol(a, l.codautor);
+		agregar(a, l);
 		v[l.genero].cantidadlibro:=v[l.genero].cantidadlibro + 1;
-		leerlibro(l);
+		leer(l);
 	end;
 end;
-		
-procedure imprimirarbol(a: arbol);
+
+Procedure insercion ( var v: vector);
+Var
+ i, j: integer; 
+ actual: infogenero;		
 begin
-	if(a <> nil) then
+ for i:= 2 to 7 do 
+	begin 
+     actual:= v[i];
+     j:= i-1; 
+     while (j > 0) and (v[j].cantidadlibro > actual.cantidadlibro) do      
+       begin
+         v[j+1]:= v[j];
+         j:= j - 1;                  
+       end;  
+     v[j+1]:= actual; 
+ end;
+end;
+
+function nombregenero(cod: integer):string;
+begin
+	case cod of
+	1: nombregenero:= 'literario';
+	2: nombreGenero := 'Filosofia';
+    3: nombreGenero := 'Biologia';
+    4: nombreGenero := 'Arte';
+    5: nombreGenero := 'Computacion';
+    6: nombreGenero := 'Medicina';
+    7: nombreGenero := 'Ingenieria';
+  else
+    nombreGenero := 'Desconocido';
+  end;
+end;
+
+function generomayor(v: vector): string;
+begin
+	insercion(v);
+	generomayor:=nombregenero(v[1].codigogenero);
+end;
+
+function cantidadlibros(a: arbol; codmin: integer; codmax: integer): integer;
+begin
+	if(a = nil) then
+	cantidadlibros:=0
+	else
 	begin
-		writeln('el codigo es: ' );
-		write(a^.dato.codigo);
-		writeln('la cantidad es: ' );
-		write(a^.dato.cantidad);
-		imprimirarbol(a^.hi);
-		imprimirarbol(a^.hd);
-	end;
+		if(a^.dato.codigo >= codmin) and (a^.dato.codigo <= codmax) then
+		cantidadlibros:=a^.dato.cantidad +cantidadlibros(a^.hi, codmin, codmin) + cantidadlibros(a^.hd, codmin, codmin)
+		else
+		if(a^.dato.codigo < codmin) then
+		cantidadlibros:=cantidadlibros(a^.hi, codmin, codmin)
+		else
+		cantidadlibros:=cantidadlibros(a^.hd, codmin, codmin);
 end;
-
-procedure imprimirvector(v: vector);
-var
-	i: subgenero;
-	nombres: array [1..7] of string = 
-    ('literario', 'filosofia', 'biologia', 'arte', 'computacion', 'medicina', 'ingenieria');
-begin
-	for i:=1 to 7 do
-	writeln('genero ' , nombres[i] , ' : ' , v[i].cantidadlibro, ' libros');
-end;
+end;  
+		
 
 var
-a: arbol;
-v: vector;
+	a: arbol;
+	v: vector;
+	gmayor: string;
+	codmin, codmax: integer;
+	total: integer;
 begin
-	iniciarvector(v);
+	iniciar(v);
+	randomize;
 	a:=nil;
-	cargar(a, v);
-	imprimirarbol(a);
-	imprimirvector(v);
+	cargar(a, v);{a}
+
+	gmayor:=generomayor(v);{b}
+	write(gmayor);{b}
+	
+	read(codmin);{c}
+	read(codmax);{c}
+	total:=cantidadlibros(a, codmin, codmax);{c}
+	write(total);{c}
 end.
+
+
