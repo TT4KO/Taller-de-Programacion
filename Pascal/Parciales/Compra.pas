@@ -35,7 +35,7 @@ arbol = ^nodo;
 end;
 
 infovector = record
-	pos: integer;
+	nombre: string;
 	cantidadcat: integer;
 end;
 
@@ -47,7 +47,13 @@ var
 begin
 	for i:=1 to 5 do
 	begin
-		v[i].pos:=i;
+		case i of
+			1 : v[i].nombre:='full';
+			2 : v[i].nombre:='super';
+			3 : v[i].nombre:='media';
+			4 : v[i].nombre:='normal';
+			5 : v[i].nombre:='basica';
+		end;
 		v[i].cantidadcat:=0;
 	end;
 end;
@@ -115,7 +121,7 @@ Var
  i, j: integer; 
  actual: infovector;	
 begin
- for i:= 2 to 8 do begin 
+ for i:= 2 to 5 do begin 
      actual:= v[i];
      j:= i-1; 
      while (j > 0) and (v[j].cantidadcat > actual.cantidadcat) do      
@@ -128,12 +134,8 @@ begin
 end;		
 
 function maximacantidad(V: vector):string;
-var
-	 nombres: array[1..5] of string = 
-	('fideos' , 'milanesa', 'laprimadelseba' ,
-	'alla', 'burguer');
 begin
-	maximacantidad:=nombres[v[5].pos];
+	maximacantidad:=v[5].nombre;
 end;
 
 var
@@ -148,6 +150,6 @@ begin
 	read(cod);{b}
 	write(total(a, cod));{b}
 	
-	insercion(v);
-	maximacantidad(v);
+	insercion(v);{c}
+	maximacantidad(v);{c}
 end.
