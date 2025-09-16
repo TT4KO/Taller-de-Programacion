@@ -18,7 +18,6 @@ venta = record
 end;
 
 informacion = record
-	numero: integer;
 	factura: integer;
 	monto: real;
 end;
@@ -85,7 +84,6 @@ begin
 		a^.dato.dni:=v.dni;
 		a^.dato.info:= nil;
 		
-		inf.numero:=v.codsuc;
 		inf.factura:=v.factura;
 		inf.monto:=v.monto;
 		agregarAdelante(a^.dato.info, inf);
@@ -102,7 +100,6 @@ begin
 			agregar(a^.hd, v) 
 		else
 		begin
-			inf.numero:=v.codsuc;
 			inf.factura:=v.factura;
 			inf.monto:=v.monto;
 			agregarAdelante(a^.dato.info, inf);
@@ -128,7 +125,7 @@ procedure imprimirLista(l: lista);
 begin
 	while(l <> nil) do
 	begin
-		write('numero, factura y monto del arbol ' , l^.dato.numero, l^.dato.factura, l^.dato.monto);
+		write('numero deactura y monto del arbol ' , l^.dato.factura, l^.dato.monto);
 		l:=l^.sig;
 	end;
 end;
@@ -184,6 +181,7 @@ begin
 end;
 end;
 
+
 var
 	a: arbol;
 	v: vector;
@@ -206,3 +204,4 @@ begin
 	maxcod:=-1;{c}
 	maximo(v, max, maxcod, 1);{c}
 end.
+
