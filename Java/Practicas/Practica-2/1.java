@@ -11,3 +11,22 @@ public class work {
         System.out.println(p2);
     }
 }
+----------------------------------
+package tema2;
+import PaqueteLectura.Lector;
+public class work {
+    public static void main(String[] args) {
+        System.out.print("ingrese un nombre: " );
+        String Nombre = Lector.leerString();
+        
+        System.out.print("ingrese el documento: " );
+        int dni = Lector.leerInt();
+        
+        System.out.print("ingrese la edad: " );
+        int edad = Lector.leerInt();
+        
+        Persona p = new Persona(Nombre, dni, edad);
+        
+        System.out.print((p.toString()));
+    }
+}
