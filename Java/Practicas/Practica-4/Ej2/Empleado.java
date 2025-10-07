@@ -10,6 +10,13 @@ package tema4.ej2;
             setAntiguedad(antiguedad);
         }
 
+     public String toString(){
+        String aux = "nombre del jugador: " + getNombre() +
+                     " | sueldo a cobrar: " + this.calcularsueldoacobrar()+
+                     " | efectividad: " + this.calcularefectividad();               
+        return aux;
+    }
+        
     public String getNombre() {
         return nombre;
     }
@@ -34,5 +41,6 @@ package tema4.ej2;
         this.antiguedad = antiguedad;
     }
         
-        
+    public abstract double calcularefectividad();
+    public abstract double calcularsueldoacobrar();
 }
