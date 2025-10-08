@@ -6,7 +6,7 @@ public class Investigadores{
     private Subsidio[] subsidio;
     private int cantsubsidios = 0;
     
-    private Investigadores(String nombre, int categoria, String especialidad){
+    public Investigadores(String nombre, int categoria, String especialidad){
         this.nombre = nombre;
         this.categoria = categoria;
         this.especialidad = especialidad;
@@ -42,4 +42,18 @@ public class Investigadores{
        return total;
    }
    
+   public void otorgartodossubsidios(){
+       for(int i=0; i<cantsubsidios; i++){
+           if(!subsidio[i].isEntregado()){
+               subsidio[i].entregado();
+           }
+       }
+   }
+   
+   public String toString(){
+       return "investigador: " + nombre +
+              " | Categoria: " + categoria +
+              " | Especialidad: " + especialidad +
+              " | Total subsidios: " + getmontototalsubsidio();                
+   }
 }
