@@ -20,6 +20,25 @@ public class Proyectos {
         }
     }
     
+    public void otorgartodos(String nombre_completo){
+        for(int i=0; i<cantinvestigadores; i++){
+        if(investigadores[i].getNombre().equalsIgnoreCase(nombre_completo)){
+            investigadores[i].otorgartodossubsidios();
+        }
+    }
+    }
+    
+    public String toString(){
+        String aux = "proyecto: " + nombre +
+                     " | codigo: " + codigo + 
+                     " | Director: " + nombredirector +
+                     " | Total dinero: " + dinerototalotorgado();
+        for(int i=0; i<cantinvestigadores; i++){
+            aux += investigadores[i].toString();
+        }
+        return aux;
+    }
+    
     public double dinerototalotorgado(){
         double total = 0;
         for(int i=0; i<cantinvestigadores; i++){
