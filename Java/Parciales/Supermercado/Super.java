@@ -32,18 +32,25 @@ public class Super {
         }
     }
     
-    public String mostrar(String marca, int numgondola){
+    public String mostrar(String marcas, int numgondola){
+        int i = numgondola - 1;
+        boolean encontrado = false;
         String aux = " - ";
             for(int j=0; j<e; j++){
-                Producto p = gondolas[numgondola][j];
-                if(p != null && p.getMarca().equalsIgnoreCase(marca)){
-                aux += p.getCodigo() + p.getNombreproducto() + p.getMarca() + p.getCant() + p.getPrecio();
-                }else
-                     aux = "numero de gondola invalido";       
-            }   
-            return aux;
+                Producto p = gondolas[i][j];
+                if(p != null && p.getMarca().equalsIgnoreCase(marcas)){
+                aux += "Producto: " + p.getCodigo() + p.getNombreproducto(); 
+                encontrado = true;
+                }
+                if(!encontrado){
+                    aux = "numero de gondola invalido";     
+                }
+                
+            }    
+     return aux;       
     }
-        
+           
+    
     
     public String toString(){
         String s = "Super Mercado: " + nombre + "; " + direccion + "\n";
@@ -55,7 +62,6 @@ public class Super {
                 s += "Estante " + (j+1) + " " + p.getNombreproducto() + " - " +
                         p.getCodigo() + " - " + p.getMarca() + " - " + 
                         p.getCant() + " - " + p.getPrecio() + "\n";
-                
                 }
             }            
         }                   
