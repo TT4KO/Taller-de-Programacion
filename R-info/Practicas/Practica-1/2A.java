@@ -5,9 +5,12 @@ procesos
     repetir cantVeces
       derecha
   fin
-  proceso recorrerAvenida(E pasos: numero)
+  proceso recorrerAvenida(ES cant: numero)
   comenzar
-    repetir pasos
+    repetir 10
+      mientras(HayPapelEnLaEsquina)
+        tomarPapel
+        cant:= cant + 1
       mover
   fin
 
@@ -16,40 +19,30 @@ areas
   
 robots
   robot robot1
+  variables
+    cant: numero
   comenzar
-    recorrerAvenida(10)
+    cant:= 0
+    recorrerAvenida(cant)
+    Informar(cant)
   fin
   
   robot robot2
+  variables
+    cant: numero
   comenzar
+    cant:=0
     girarDerecha(1)
-    recorrerAvenida(10)
-  fin
-  
-  robot robot3
-  comenzar
-    girarDerecha(2)
-    recorrerAvenida(10)
-  fin
-  
-  robot robot4
-  comenzar
-    girarDerecha(3)
-    recorrerAvenida(10)
+    recorrerAvenida(cant)
+    Informar(cant)
   fin
   
 variables
   info: robot1
   info2: robot2
-  info3: robot3
-  info4: robot4
 comenzar
   AsignarArea(info, ciudad)
   AsignarArea(info2, ciudad)
-  AsignarArea(info3, ciudad)
-  AsignarArea(info4, ciudad)
   Iniciar(info, 10,10)
   Iniciar(info2, 10, 20)
-  Iniciar(info3, 20, 20)
-  Iniciar(info4, 20, 10)
 fin
