@@ -43,14 +43,17 @@ robots
   fin
   robot jefe
   variables
-    f1, f2, dif: numero
+    f1, f2, dif, quien: numero
   comenzar
     RecibirMensaje(f1, *)
-    RecibirMensaje(f2, robot2)
+    RecibirMensaje(f2, *)
     si(f1 > f2)
       dif:=f1 - f2
+      quien:= 1
     sino
       dif:= f2 - f1
+      quien:= 2
+    Informar(quien)
     Informar(dif)
   fin
 variables
@@ -61,6 +64,7 @@ comenzar
   AsignarArea(r1, ciudad)
   AsignarArea(r2, ciudad)
   AsignarArea(r, ciudad)
+
   Iniciar(r1, 1,1)
   Iniciar(r2, 11, 2)
   Iniciar(r, 11, 1)
