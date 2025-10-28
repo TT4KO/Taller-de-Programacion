@@ -1,0 +1,58 @@
+programa ejemplo
+procesos
+  proceso juntarpapel(ES p: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+  fin
+  proceso juntarFlores(ES f: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel  
+      p:=p + 1
+  fin
+  proceso moversea(ES p: numero)
+  comenzar
+    repetir 20
+      juntarpapel(p)
+      mover
+  fin
+  proceso moverseb(ES f: numero)
+  comenzar
+    repetir 20
+      juntarFlores(f)
+      mover
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot equipoa
+  variables 
+    f: numero
+  comenzar
+    f:= 0
+    moversea(f)
+  fin 
+  robot equipob
+  variables
+    p: numero
+  comenzar
+    p:= 0
+    moverseb(p)
+  fin
+variables
+  a1: equipoa
+  a2: equipoa
+  b1: equipob
+  b2: equipob
+comenzar
+  AsignarArea(a1, ciudad)
+  AsignarArea(a2, ciudad)
+  AsignarArea(b1, ciudad)
+  AsignarArea(b2, ciudad)
+  Iniciar(a1, 1,1)
+  Iniciar(a2, 2,1)
+  Iniciar(b1, 3,1)
+  Iniciar(b2, 4, 1)
+fin
