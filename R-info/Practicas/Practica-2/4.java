@@ -27,19 +27,20 @@ robots
   comenzar
     calle:= PosCa
     avenida:=PosAv
-    Random(rdm, 25, 75)
-    caller:= rdm
-    avenidar:= rdm
     p:= 0
-    f:= 0
-    RecibirMensaje(iniciar, r)
-    recorrerAvenida
-    Pos(avenidar, caller)
-    juntar(p, f)
-    Pos(avenida, calle)    
-    EnviarMensaje(p, r)
-    EnviarMensaje(f, r)
-    EnviarMensaje(iniciar, r)
+    f:= 0  
+    repetir 4
+      Random(rdm, 25, 75)
+      caller:= rdm
+      avenidar:=rdm
+      RecibirMensaje(iniciar, r)
+      recorrerAvenida
+      Pos(avenidar, caller)
+      juntar(p, f)
+      Pos(avenida, calle)    
+      EnviarMensaje(p, r)
+      EnviarMensaje(f, r)
+      EnviarMensaje(iniciar, r)
   fin
   robot jefe
   variables
@@ -48,7 +49,7 @@ robots
   comenzar  
     totalf:= 0
     totalp:= 0
-    repetir 5
+    repetir 4
       Random(elegido, 1, 3)
       si(elegido = 1)
         EnviarMensaje(iniciar, r1)
@@ -61,8 +62,8 @@ robots
       RecibirMensaje(f1, *)
       totalf:= totalf + f1
       RecibirMensaje(iniciar, *)
-    Informar(totalp)
     Informar(totalf)
+    Informar(totalp)
   fin
 variables
   r1: colector
