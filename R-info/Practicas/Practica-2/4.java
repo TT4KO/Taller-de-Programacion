@@ -44,11 +44,13 @@ robots
   fin
   robot jefe
   variables
-    totalf, totalp, f1, p1, elegido: numero
+    totalf, totalp, f1, p1, elegido, max, mejor: numero
     iniciar: boolean
   comenzar  
     totalf:= 0
     totalp:= 0
+    max:=-1
+    mejor:=0
     repetir 4
       Random(elegido, 1, 3)
       si(elegido = 1)
@@ -62,8 +64,9 @@ robots
       RecibirMensaje(f1, *)
       totalf:= totalf + f1
       RecibirMensaje(iniciar, *)
-    Informar(totalf)
-    Informar(totalp)
+      si(totalf + totalp > max)
+        max:=f1
+        mejor:= elegido
   fin
 variables
   r1: colector
