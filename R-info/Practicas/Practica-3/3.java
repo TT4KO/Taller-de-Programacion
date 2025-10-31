@@ -17,16 +17,17 @@ robots
     altura, ancho, quien, calle, avenida, f: numero
   comenzar
     f:= 0
-    calle:=PosCa
-    avenida:=PosAv
-    RecibirMensaje(quien, r)
-    RecibirMensaje(altura, r)
-    RecibirMensaje(ancho, r)
-    BloquearEsquina(altura, ancho)
-    Pos(altura, ancho)
-    juntar(f)
-    Pos(avenida, calle)
-    LiberarEsquina(altura, ancho)
+    repetir 3
+      calle:=PosCa
+      avenida:=PosAv
+      RecibirMensaje(quien, r)
+      RecibirMensaje(altura, r)
+      RecibirMensaje(ancho, r)
+      BloquearEsquina(altura, ancho)
+      Pos(altura, ancho)
+      juntar(f)
+      Pos(avenida, calle)
+      LiberarEsquina(altura, ancho)
     EnviarMensaje(quien, r)
     EnviarMensaje(f, r)
   fin
@@ -37,18 +38,17 @@ robots
     max, rmax, quien, f: numero
   comenzar
     max:=0
-    Random(rdm, 2, 10)
-    EnviarMensaje(1, r1)
-    EnviarMensaje(rdm, r1)
-    EnviarMensaje(rdm, r1) 
-    Random(rdm, 2, 10)
-    EnviarMensaje(2, r2)
-    EnviarMensaje(rdm, r2)
-    EnviarMensaje(rdm, r2)
-    Random(rdm, 2, 10)
-    EnviarMensaje(3, r3)
-    EnviarMensaje(rdm, r3)
-    EnviarMensaje(rdm, r3)
+    repetir 3
+      Random(rdm, 2, 10)
+      EnviarMensaje(1, r1)
+      EnviarMensaje(rdm, r1)
+      EnviarMensaje(rdm, r1) 
+      EnviarMensaje(2, r2)
+      EnviarMensaje(rdm, r2)
+      EnviarMensaje(rdm, r2)
+      EnviarMensaje(3, r3)
+      EnviarMensaje(rdm, r3)
+      EnviarMensaje(rdm, r3)
     repetir 3
       RecibirMensaje(quien, *)  
       si(quien = 1)
