@@ -9,21 +9,17 @@ procesos
     avenida:= PosAv
     BloquearEsquina(50, 50)
     Pos(50, 50)
-    mientras(cant <> 0)
-      si(HayFlorEnLaEsquina)
-        repetir cant
-          tomarFlor
-          f:= f +1
-          cant:=cant - 1
-        Pos(avenida, calle)
-        LiberarEsquina(50, 50)
-        mientras(f <> 0)
-          depositarFlor
-          f:= f - 1
-      sino
-        corte:=corte - 1
-        Pos(avenida, calle)
-        LiberarEsquina(50, 50)
+    si(HayFlorEnLaEsquina)
+      repetir cant
+        tomarFlor
+      Pos(avenida, calle)
+      LiberarEsquina(50, 50)
+      repetir cant
+        depositarFlor
+    sino
+      corte:=corte - 1
+      Pos(avenida, calle)
+      LiberarEsquina(50, 50)
   fin
   proceso moverse
   variables
