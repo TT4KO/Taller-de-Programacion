@@ -34,8 +34,9 @@ procesos
     miav:= PosAv
     BloquearEsquina(avenida, calle)
     Pos(avenida, calle)
-    mientras(HayFlorEnLaBolsa) | (HayPapelEnLaBolsa)
+    mientras(HayFlorEnLaBolsa) 
       depositarFlor
+    mientras(HayPapelEnLaBolsa)
       depositarPapel
     Pos(miav, mica)
     LiberarEsquina(avenida, calle)
@@ -48,7 +49,7 @@ robots
   variables
     calle, avenida, tarea: numero
   comenzar
-    mientras(tarea <> 4)
+    si(tarea <> 4)
       RecibirMensaje(avenida, r)
       RecibirMensaje(calle, r)
       RecibirMensaje(tarea, r)
