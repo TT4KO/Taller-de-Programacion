@@ -35,10 +35,29 @@ procesos
         mover
     dejar(f)
   fin
+  proceso barrera(E id: numero; E ok: boolean)
+  comenzar
+    si(id = 1)
+      EnviarMensaje(ok, r2)
+      EnviarMensaje(ok, r3)
+      RecibirMensaje(ok, r2)
+      RecibirMensaje(ok, r3)
+    sino
+      si(id = 2)
+        EnviarMensaje(ok, r1)
+        EnviarMensaje(ok, r3)
+        RecibirMensaje(ok, r1)
+        RecibirMensaje(ok, r3)
+      sino
+        EnviarMensaje(ok, r1)
+        EnviarMensaje(ok, r2)
+        RecibirMensaje(ok, r1)
+        RecibirMensaje(ok, r2)
+  fin
 areas
   ciudad: AreaC (1,1,100,100)
 robots
-  robot juntadores1
+  robot juntadores
   variables
     id, f: numero
     iniciar: boolean
@@ -48,36 +67,8 @@ robots
     derecha
     repetir 10
       actuar(f)
-      EnviarMensaje(iniciar, r2)
-      RecibirMensaje(iniciar, r3)
-  fin
-  robot juntadores2
-  variables
-    id, f: numero
-    iniciar: boolean
-  comenzar
-    RecibirMensaje(id, r)
-    f:=0
-    derecha
-    repetir 10
-      RecibirMensaje(iniciar, r1)
-      actuar(f)
-      EnviarMensaje(iniciar, r3)
-  fin
-  robot juntadores3
-  variables
-    id, f: numero
-    iniciar: boolean
-  comenzar
-    RecibirMensaje(id, r)
-    f:=0
-    derecha
-    repetir 10
-      RecibirMensaje(iniciar, r2)
-      actuar(f)
-      EnviarMensaje(iniciar, r1)
-    EnviarMensaje(id, r)
-    EnviarMensaje(iniciar, r)
+      barrera(id, iniciar)
+    EnviarMensaje(iniciar,r)
   fin
   robot jefe
   variables
@@ -89,14 +80,14 @@ robots
     EnviarMensaje(2, r2)
     EnviarMensaje(3, r3)
     RecibirMensaje(id, r3)
-    RecibirMensaje(iniciar, r3)
+    RecibirMensaje(iniciar, *)
     busqueda(total)
     Informar(total)
   fin
 variables
-  r1: juntadores1
-  r2: juntadores2
-  r3: juntadores3
+  r1: juntadores
+  r2: juntadores
+  r3: juntadores
   r: jefe
 comenzar
   AsignarArea(r1, ciudad)
