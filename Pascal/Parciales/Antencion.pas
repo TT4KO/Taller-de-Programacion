@@ -1,54 +1,41 @@
-{de cada atencion se lee: matricula del medico, dni del paciente, dia y diagnostico(valor entre A y F). La lectura finaliza con le dni 0. 
-Se sugier eutilzair el modulo leeratacion(). El modulo debe retornar dos estructuras
-i. Un arbol binario con busqueda ordenado por matricula del medico. Para cada matricula de mecido debe almacenarse la cantidad de atenaciones realizada.
-ii.Un vector que almacene en cada posicion el tipo de genero y la lista de los dni de pacientes atendidos con ese diagnosticio.
-
-b)implementar un modulo que reciba el arbol generado en a), una matricula y retorne la cantidad total de atenciones realizadas 
-  por los medicos con matricula superior a la matricula ingresada
-
-c) realizar un modulo recursivo que reciba el vector generado en a) y retorne el diagnostico con mayor cantida de pacientes atentidos.}
-
-program asd;
-const
-	diagmin = 1;
-	diagmax = 6;
+program iajsd;
 type
-rangodiag = diagmin..diagmax;
+rango = 'A'..'F';
 atencion = record
 	matricula: integer;
 	dni: integer;
 	dia: integer;
-	diagnostico: char;
+	diagnostico: rango;
 end;
 
 medico = record
-	matricula: integer;
+	matricula2: integer;
 	cantidad: integer;
 end;
 
 arbol = ^nodo;
-	nodo = record
+	nodo =  record
 	dato: medico;
-	hd, hi: arbol;
+	hi, hd: arbol;
 end;
 
 lista = ^nodo2;
 	nodo2 = record
-	dni: integer;
+	dato: integer;
 	sig: lista;
 end;
 
-vector = array [rangodiag] of lista;
+vector = array [rango] of lista;
 
 procedure iniciar(var v: vector);
 var
-	i: rangodiag;
+	i: rango;
 begin
-	for i:=diagmin to diagmax do
+	for i:='A' to 'F' do
 	v[i]:=nil;
-end; 
+end;
 
-procedure leeratencion(var a: atencion);
+procedure leer(var a: atencion);
 var
 	v: array [1..6] of char = ('A', 'B', 'C', 'D', 'E', 'F');
 begin
@@ -61,101 +48,101 @@ begin
 	end;
 end;
 
-procedure agregar(var a: arbol; at: atencion);
+
+procedure agregar(var a:arbol; at: atencion);
 begin
-	if (a = nil) then
+	if(a = nil) then
 	begin
 		new(a);
-		a^.dato.matricula:=at.matricula;
-		a^.dato.cantidad:= 1;
+		a^.dato.matricula2:=at.matricula;
+		a^.dato.cantidad:=1;
 		a^.hi:=nil;
 		a^.hd:=nil;
 	end
 	else
-	if(at.matricula = a^.dato.matricula) then
-	a^.dato.cantidad:=a^.dato.cantidad + 1
+	if(a^.dato.matricula2 = at.matricula) then
+		a^.dato.cantidad:=a^.dato.cantidad + 1
 	else
-	if(at.matricula < a^.dato.matricula) then
+	if(at.matricula < a^.dato.matricula2) then
 		agregar(a^.hi, at)
-		else
-	agregar(a^.hd, at);
+	else
+		agregar(a^.hd, at);
 end;
 
-function indice(d: char): integer;
-begin
-  case d of
-    'A': indice := 1;
-    'B': indice := 2;
-    'C': indice := 3;
-    'D': indice := 4;
-    'E': indice := 5;
-    'F': indice := 6;
-  else
-    indice := 0; 
-  end;
-end;
 
-procedure agregarAdelante(var l: lista; dni: integer);
+procedure adelante(var l: lista; dni: integer);
 var
   nuevo: lista;
 begin
   new(nuevo);
-  nuevo^.dni := dni;
+  nuevo^.dato := dni;
   nuevo^.sig := l;
   l := nuevo;
 end;
 
-procedure agregarvector(var v: vector; at: atencion);
-var
-	i: integer;
-begin
-	i:=indice(at.diagnostico);
-	if (i <> 0) then
-	agregaradelante(v[i], at.dni);
-end;
 
 procedure cargar(var a: arbol; var v: vector);
 var
 	at: atencion;
 begin
-	leeratencion(at);
+	leer(at);
 	while(at.dni <> 0) do
 	begin
 		agregar(a, at);
-		agregarvector(v, at);
-		leeratencion(at);
+		adelante(v[at.diagnostico], at.dni);
+		leer(at);
 	end;
-end; 
-
-function atenciones(a: arbol; num: integer): integer;
-begin
-	if(a = nil) then
-	atenciones:=0
-	else
-	begin
-	if(a^.dato.matricula > num) then
-	atenciones:=a^.dato.cantidad + atenciones(a^.hi, num) + atenciones(a^.hd, num)
-	else
-	atenciones:=atenciones(a^.hd, num);
-end;  
 end;
 
-procedure mayor(v: vector; max: integer);
+function puntob(a: arbol; num: integer): integer;
 begin
-	
-	
+	if(a = nil) then
+	puntob:=0
+	else
+	if(a^.dato.matricula2 > num) then
+		puntob:=a^.dato.cantidad + puntob(a^.hi, num) + puntob(a^.hd, num)
+	else
+		puntob:=puntob(a^.hd, num);
+end;
+
+function recorrer(l: lista): integer;
+begin
+	if(l = nil) then
+		recorrer:=0
+	else
+		recorrer:=recorrer(l^.sig) + 1;
+end;
+
+procedure puntoc(v: vector; var max: integer; var diagmax: rango; diag: rango);
+var
+	cant: integer;
+begin
+	if diag <= 'F' then
+		cant:=recorrer(v[diag]);
+		if(cant > max) then
+			begin
+		max:=cant;
+			diagmax:=diag;
+	end;
+	puntoc(v, max, diagmax, succ(diag));
+end;
 
 var
-	v: vector;
 	a: arbol;
+	v: vector;
 	matri: integer;
-	total: integer;
+	max: integer;
+	diagmax: rango;
 begin
-	iniciar(v);
+	max:=-1;
+	diagmax:='A';
 	a:=nil;
-	cargar(a, v);{a}{b}
+	iniciar(v);
+	cargar(a, v);
 	
 	read(matri);
-	total:=atenciones(a, matri);
-	write(total);
+	puntob(a, matri);
+	write(puntob(a, matri));
+	puntoc(v, max, diagmax, 'A');
+	write(diagmax);
 end.
