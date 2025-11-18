@@ -1,6 +1,8 @@
 {de cada atencion se lee: matricula del medico, dni del paciente, dia y diagnostico(valor entre A y F). La lectura finaliza con le dni 0. 
-Se sugier eutilzair el modulo leeratacion(). El modulo debe retornar dos estructuras i. Un arbol binario con busqueda ordenado por matricula del medico. 
-Para cada matricula de mecido debe almacenarse la cantidad de atenaciones realizada. 
+Se sugier eutilzair el modulo leeratacion(). 
+El modulo debe retornar dos estructuras 
+i. Un arbol binario con busqueda ordenado por matricula del medico. 
+   Para cada matricula de mecido debe almacenarse la cantidad de atenaciones realizada. 
 ii.Un vector que almacene en cada posicion el tipo de genero y la lista de los dni de pacientes atendidos con ese diagnosticio.
 b)implementar un modulo que reciba el arbol generado en a), una matricula y 
   retorne la cantidad total de atenciones realizadas por los medicos con matricula superior a la matricula ingresada
