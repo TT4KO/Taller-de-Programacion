@@ -11,35 +11,19 @@ c) Implementar un módulo que reciba el vector generado en al, un número de mes
 y retorne si fue comprado o no el producto ingresado en el mes recibido.
 NOTA: Implementar el programa principal, que invoque a los incisos a, b y с}
 
-program iasd;
+program iajsd;
 type
 rango = 1..12;
-compras = record
-	codigoproducto: integer;
-	codigocliente: integer;
+compra = record
+	codigo: integer;
+	cliente: integer;
 	dia: integer;
 	mes: rango;
 end;
 
-informacion = record
-	cliente: integer;
-	dia: integer;
-end;
-
-lista = ^nodo2;
-	nodo2 = record
-	dato: informacion;
-	sig: lista;
-end;
-
-producto = record
-	codigo: integer;
-	info: lista;
-end;
-
 arbol = ^nodo;
 	nodo = record
-	dato: producto;
+	dato: compra;
 	hi, hd: arbol;
 end;
 
@@ -47,145 +31,112 @@ vector = array [rango] of arbol;
 
 procedure iniciar(var v: vector);
 var
-	i: rango;
+	i: integer;
 begin
 	for i:=1 to 12 do
 	v[i]:=nil;
 end;
 
-procedure leer(var c: compras);
+procedure leer(var c: compra);
 begin
-	c.codigocliente:=random(200);
-	if(c.codigocliente <> 0) then
+	read(c.cliente);
+	if(c.cliente <> 0) then
 	begin
-		c.dia:=random(30)+1;
-		c.mes:=random(12)+1;
-		c.codigoproducto:=random(100) + 1000;
+		read(c.codigo);
+		read(c.dia);
+		read(c.mes);
 	end;
 end;
 
-procedure agregaradelante(var l: lista; inf: informacion);
-var
-  nue: lista;
-begin
-  new(nue);
-  nue^.dato := inf;
-  nue^.sig := l;
-  l := nue;
-end;
-
-procedure agregar(var a: arbol; c: compras);
-var
-	inf: informacion;
+procedure agregar(var a: arbol; c: compra);
 begin
 	if(a = nil) then
 	begin
 		new(a);
-		a^.dato.codigo:=c.codigoproducto;
-		a^.dato.info:=nil;
-		inf.cliente:=c.codigocliente;
-		inf.dia:=c.dia;
-		agregarAdelante(a^.dato.info, inf);
+		a^.dato:=c;
 		a^.hi:=nil;
 		a^.hd:=nil;
 	end
 	else
-	if(c.codigoproducto < a^.dato.codigo) then
-		agregar(a^.hi, c)
+	if(c.codigo < a^.dato.codigo) then
+		agregar(a^.hi, c) 
 	else
-	begin
-	if(c.codigoproducto > a^.dato.codigo) then
-		agregar(a^.hd, c) 
-	else
-		inf.cliente:=c.codigocliente;
-		inf.dia:=c.dia;
-		agregarAdelante(a^.dato.info, inf);
-	end;
+		agregar(a^.hd, c);
 end;
-
 
 procedure cargar(var v: vector);
 var
-	c: compras;
+	c: compra;
 begin
 	leer(c);
-	while(c.codigocliente <> 0) do
+	while(c.cliente <> 0) do
 	begin
 		agregar(v[c.mes], c);
 		leer(c);
 	end;
 end;
 
-function contarlista(l: lista): integer;
+procedure fijarse(a: arbol; var cant: integer);
 begin
-	if(l = nil) then
-	contarlista:=0
-	else
-	contarlista:=1 + contarlista(l^.sig);
-end;
-	
-
-function contararbol(a: arbol): integer;
-begin
-	if(a = nil) then
-	contararbol:=0
-	else
-	contararbol:=contararbol(a^.hi) + contararbol(a^.hd) + contarlista(a^.dato.info);
-end;
-
- 
-procedure incisob(v: vector; var max, mesmax: integer; i: integer);
-var
-	cant: integer;
-begin
-	if(i<= 12) then
+	if(a <> nil) then
 	begin
-		cant:=contararbol(v[i]);
-		if(cant > max) then
-		begin
-			max:=cant;
-			mesmax:=i;
-		end;
-		incisob(v, max, mesmax, i+1);
+	fijarse(a^.hi, cant);
+		cant:=cant + 1;
+	fijarse(a^.hd, cant);
 	end;
 end;
 
-function buscar(a: arbol; cod: integer): boolean;
+procedure puntob(v: vector; var max, mesmax: integer; i: integer);
+var
+	cant: integer;
 begin
-	if(a = nil) then
-	buscar:=false
-	else
-	if(a^.dato.codigo = cod) then
-	buscar:=true
-	else
-	if(cod < a^.dato.codigo) then
-	buscar(a^.hi, cod) 
-	else
-	buscar(a^.hd, cod);
+	cant:=0;
+	if (i <= 12) then
+	begin
+	fijarse(v[i], cant);
+	if(cant > max) then
+	begin
+		max:=cant;
+		mesmax:=i;
+	end;
+	puntob(v, max, mesmax, i+1);
+end;
 end;
 
-function incisoc(v: vector; mes, cod: integer):boolean;
+function encontrado(a: arbol; cod: integer): boolean;
 begin
-	incisoc:=buscar(v[mes], cod);
+	if(a = nil) then
+	encontrado:=false
+	else
+	if(a^.dato.codigo = cod) then
+		encontrado:=true
+	else
+	if(cod < a^.dato.codigo) then
+		encontrado(a^.hi, cod)
+	else
+		encontrado(a^.hd, cod);
 end;
+
+function puntoc(v: vector; num, cod: integer): boolean;
+begin
+	puntoc:=false;
+	if (encontrado(v[num], cod)) then
+	puntoc:=true;
+end; 
 
 var
 	v: vector;
 	max, mesmax: integer;
-	mes, cod: integer;
+	mesleer, cod: integer;
 begin
 	iniciar(v);
 	cargar(v);
-
-	max:=-1;{b}
-	mesmax:=-1;{b}
-	incisob(v, max, mesmax, 1);{b}
-	write(max, mesmax);{b}
-	
-	read(mes);
+	max:=-1;
+	puntob(v, max, mesmax, 1);
+	read(mesleer);
 	read(cod);
-	if(incisoc(v, mes, cod)) then
-	write('se encontro')
-	else
-	write('no se encontro');
+	if(puntoc(v, mesleer, cod)) then
+		write('se encontro')
+		else
+		write('no encontrado');
 end.
