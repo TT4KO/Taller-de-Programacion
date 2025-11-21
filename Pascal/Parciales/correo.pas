@@ -11,19 +11,19 @@ C) Realizar un módulo recursivo que reciba la estructura que retorna el inciso 
 y retorne los dos códigos de cliente correspondientes al envío con mayor y menor peso.
 }
 
-program ias;
+program iajsd;
 type
 envio = record
-	codigocliente: integer;
-	codigopostal: integer;
+	cliente: integer;
 	dia: integer;
+	postal: integer;
 	peso: real;
 end;
 
 informacion = record
-	codigo: integer;
-	dia: integer;
-	peso: real;
+	dia2: integer;
+	peso2: real;
+	cliente2: integer;
 end;
 
 lista = ^nodo;
@@ -32,29 +32,34 @@ lista = ^nodo;
 	sig: lista;
 end;
 
-envioarbol = record
-	postal: integer;
+codigo = record
+	postal2: integer;
 	info: lista;
 end;
 
+lista2 = ^nodo3;
+	nodo3 = record
+	dato: informacion;
+	sig: lista2;
+end;
 arbol = ^nodo2;
 	nodo2 = record
-	dato: envioarbol;
-	hd, hi: arbol;
+	dato: codigo;
+	hi, hd: arbol;
 end;
 
 procedure leer(var e: envio);
 begin
-	read(e.codigocliente);
-	if(e.codigocliente <> 0) then
+	read(e.cliente);
+	if(e.cliente <> 0) then
 	begin
-		read(e.codigopostal);
 		read(e.dia);
+		read(e.postal);
 		read(e.peso);
 	end;
 end;
 
-procedure agregaradelante(var l: lista; i: informacion);
+procedure adelante(var l: lista; i: informacion);
 var
 	nue: lista;
 begin
@@ -71,30 +76,27 @@ begin
 	if(a = nil) then
 	begin
 		new(a);
-		a^.dato.postal:=e.codigopostal;
+		a^.dato.postal2:=e.postal;
 		a^.dato.info:=nil;
-		
-		inf.codigo:=e.codigocliente;
-		inf.dia:=e.dia;
-		inf.peso:=e.peso;
-		agregaradelante(a^.dato.info, inf);
-		
+		inf.dia2:=e.dia;
+		inf.peso2:=e.peso;
+		inf.cliente2:=e.cliente;
+		adelante(a^.dato.info, inf);
 		a^.hi:=nil;
 		a^.hd:=nil;
 	end
 	else
-	begin
-	if(e.codigopostal < a^.dato.postal) then
-		agregar(a^.hi, e);
-	if(e.codigopostal > a^.dato.postal) then
+	if(e.postal < a^.dato.postal2) then
+		agregar(a^.hi, e)
+	else
+	if(e.postal > a^.dato.postal2) then
 		agregar(a^.hd, e)
 	else
 	begin
-		inf.codigo:=e.codigocliente;
-		inf.dia:=e.dia;
-		inf.peso:=e.peso;
-		agregaradelante(a^.dato.info, inf);
-	end;
+		inf.dia2:=e.dia;
+		inf.peso2:=e.peso;
+		inf.cliente2:=e.cliente;
+		adelante(a^.dato.info, inf);
 	end;
 end;
 
@@ -103,82 +105,79 @@ var
 	e: envio;
 begin
 	leer(e);
-	while(e.codigocliente <> 0) do
+	while(e.cliente <> 0) do
 	begin
 		agregar(a, e);
 		leer(e);
 	end;
 end;
 
-procedure mostrarenvios(l: lista);
+procedure agregardelante(var l: lista2; i: informacion);
+var
+	nue: lista2;
+begin
+	new(nue);
+	nue^.dato:=i;
+	nue^.sig:=l;
+	l:=nue;
+end;
+
+procedure insertar(l: lista; var l2: lista2);
 begin
 	while(l <> nil) do
 	begin
-		write(l^.dato.codigo , l^.dato.dia , l^.dato.peso);
+		agregardelante(l2, l^.dato);
 		l:=l^.sig;
 	end;
 end;
 
-procedure incisob(a: arbol; cod: integer);
+procedure puntob(a: arbol; var l: lista2; cod: integer);
 begin
-	if(a = nil) then
-	write('no se encontro el codigo postal')
-	else
-	if(cod = a^.dato.postal) then
+	if(a <> nil) then
 	begin
-		write('envios del codigo postal' , cod , ' : ');
-		mostrarenvios(a^.dato.info);
-	end
-	else
-	if(cod < a^.dato.postal) then
-	incisob(a^.hi, cod)
-	else
-	incisob(a^.hd, cod)
+		if(cod < a^.dato.postal2) then
+			puntob(a^.hi, l, cod)
+		else
+		if(cod > a^.dato.postal2) then
+			puntob(a^.hd, l, cod)
+		else
+			insertar(a^.dato.info, l);
+		end;
 end;
 
-procedure incisoc(l: lista; minpeso, maxpeso: real; mincod, maxcod: integer);
+procedure puntoc(l: lista2; var codmin, codmax: integer; var min, max: real);
 begin
 	if(l <> nil) then
 	begin
-		minpeso:= l^.dato.peso;
-		maxpeso:=l^.dato.peso;
-		mincod:=l^.dato.codigo;
-		maxcod:=l^.dato.codigo;
-	end
-	else
-	begin
-	if(l^.dato.peso < minpeso) then
-	begin
-		minpeso:=l^.dato.peso;
-		mincod:=l^.dato.codigo;
+		if(l^.dato.peso2 > max) then
+		begin
+			max:=l^.dato.peso2;
+			codmax:=l^.dato.cliente2;
+		end;
+		if(l^.dato.peso2 < min) then
+		begin
+			min:=l^.dato.peso2;
+			codmin:=l^.dato.cliente2;
+		end;
+		puntoc(l^.sig, codmin, codmax, min, max);
 	end;
-	if(l^.dato.peso > minpeso) then
-	begin
-		maxpeso:=l^.dato.peso;
-		maxcod:=l^.dato.codigo
-	end;
-	incisoc(l^.sig, minpeso, maxpeso, mincod, maxcod);
-end;
 end;
 
+
 var
-	a:arbol;
+	a: arbol;
+	l2: lista2;
 	cod: integer;
-	minpeso, maxpeso: real;
-	mincod, maxcod: integer;
-	l: lista;
+	codmin, codmax: integer;
+	min, max: real;
 begin
-	l:=nil;
 	a:=nil;
-	cargar(a);{a}
-	
-	read(cod);{b}
-	incisob(a, cod);{b}
-	
-	mincod:=9999;
-	minpeso:=9999;
-	maxpeso:=-1;
-	maxcod:=-1;
-	
-	incisoc(l, minpeso, maxpeso, mincod, maxcod)
+	l2:=nil;
+	min:=9999;
+	max:=-1;
+	cargar(a);
+	read(cod);
+	puntob(a, l2, cod);
+	puntoc(l2, codmin, codmax, min, max);
+	write(codmin, codmax);
 end.
